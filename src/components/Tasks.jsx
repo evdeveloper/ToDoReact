@@ -1,19 +1,27 @@
 import Task from "./Task"
 const Tasks = (props) => {
-  const hasTasks = true
-
   const { 
     tasks = [], 
+    filteredTasks,
     onDeleteTask,
     onTaskCompleteChange,
   } = props
 
+  const hasTasks = tasks.length > 0
+  const isEmptyFilteredTasks = filteredTasks?.length === 0
+
   if(!hasTasks) {
-    return <div className="todo__empty-message"></div>
+    return <div className="todo__empty-message">There are no tasks</div>
   }
+
+  if(isEmptyFilteredTasks && hasTasks) {
+    return <div className="todo__empty-message">No tasks found</div>
+  }
+
+
   return (
     <ul className="todo__list">
-      {tasks.map(task => (
+      {(filteredTasks ?? tasks).map(task => (
         <Task 
           className="todo__item"
           onDeleteTask={onDeleteTask}

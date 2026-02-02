@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import AddTaskForm from "./AddTaskForm"
 import SearchTaskForm from "./SearchTaskForm"
 import Info from "./Info"
@@ -6,8 +6,15 @@ import Tasks from "./Tasks"
 
 const Todo = () => {
 
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState(() => {
+    const tasks = localStorage.getItem('tasks')
+    if(tasks) {
+      return JSON.parse(tasks)
+    }
+    return []
+  })
   const [tasksText, setTasksText] = useState('')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const deleteAllTasks = () => {
     const isComfirm = confirm('Are you sure you want to delete all tasks?')
@@ -24,10 +31,6 @@ const Todo = () => {
     setTasks(tasks.map(task => task.id === taskId ? {...task, isDone} : task))
   }
 
-  const filterTasks = (query) => {
-    console.log('Filter tasks', query)
-  }
-
   const addTask = () => {
     if(tasksText.trim().length > 0) {
       const newTask = {
@@ -37,8 +40,17 @@ const Todo = () => {
       }
       setTasks([...tasks, newTask])
       setTasksText('')
+      setSearchQuery('')
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
+
+  const clearSearchQuery = searchQuery.trim().toLowerCase()
+  const filteredTasks = clearSearchQuery.length > 0 ? tasks.filter(({label}) => label.toLowerCase().includes(clearSearchQuery)) : null
+
 
   return (
     <div className="todo">
@@ -49,7 +61,8 @@ const Todo = () => {
         setTasksText={setTasksText}
       />
       <SearchTaskForm 
-        onSearchInput={filterTasks}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       <Info 
         total={tasks.length}
@@ -59,6 +72,7 @@ const Todo = () => {
       <Tasks 
         tasks={tasks} 
         onDeleteTask={deleteTask}
+        filteredTasks={filteredTasks}
         onTaskCompleteChange={toggleTaskComplete}
       />
     </div>
