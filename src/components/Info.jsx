@@ -1,5 +1,6 @@
-const Info = (props) => {
+import { memo } from "react"
 
+const Info = (props) => {
   const { 
     total,
     done,
@@ -20,4 +21,4 @@ const Info = (props) => {
   )
 }
 
-export default Info
+export default memo(Info)

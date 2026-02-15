@@ -5,7 +5,8 @@
     type = 'text',
     label,
     onInput,
-    value
+    value,
+    ref
   } = props
   return (
     <div className={`field ${className}`}>
@@ -23,6 +24,7 @@
         autoComplete="off"
         onInput={onInput}
         value={value}
+        ref={ref}
       />
     </div>
   )

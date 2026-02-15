@@ -1,10 +1,13 @@
 import Task from "./Task"
+import { memo } from "react"
 const Tasks = (props) => {
   const { 
     tasks = [], 
     filteredTasks,
     onDeleteTask,
     onTaskCompleteChange,
+    firstIncompleteTaskId,
+    firstIncompleteTaskRef
   } = props
 
   const hasTasks = tasks.length > 0
@@ -27,6 +30,7 @@ const Tasks = (props) => {
           onDeleteTask={onDeleteTask}
           onTaskCompleteChange={onTaskCompleteChange}
           key={task.id}
+          ref={task.id === firstIncompleteTaskId ? firstIncompleteTaskRef : null}
           {...task}
         />
       ))}
@@ -34,4 +38,4 @@ const Tasks = (props) => {
   )
 }
 
-export default Tasks
+export default memo(Tasks)

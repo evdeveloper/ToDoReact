@@ -1,5 +1,6 @@
-const Task = (props) => {
+import { memo } from "react"
 
+const Task = (props) => {
   const { 
     className = '',
     id,
@@ -7,10 +8,11 @@ const Task = (props) => {
     isDone,
     onDeleteTask,
     onTaskCompleteChange,
+    ref
   } = props
 
   return (
-    <li className={`todo-item ${className}`}>
+    <li className={`todo-item ${className}`} ref={ref}>
       <input
         className="todo-item__checkbox"
         id={id}
@@ -50,4 +52,4 @@ const Task = (props) => {
   )
 }
 
-export default Task
+export default memo(Task)
